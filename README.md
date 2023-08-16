@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [vite](https://vitejs.dev/) + [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/) Starter
 
 This setup includes:
@@ -11,3 +12,7 @@ This setup includes:
 * https://markus.oberlehner.net/blog/using-testing-library-jest-dom-with-vitest/
 * https://testing-library.com/docs/queries/about#priority
 * https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+=======
+# react-base-course
+React JS Fundamental Course
+>>>>>>> e4577f81967359bb0d58125752f2c6eac5106469
