@@ -1,5 +1,5 @@
 /* eslint-disable no-return-assign */
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
@@ -16,12 +16,21 @@ export function App() {
   ]);
 
   const [title, setTitle] = useState('');
-  const bodyInputRef = useRef();
+  const [body, setBody] = useState('');
 
   const addPost = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log(title);
-    console.log(bodyInputRef.current.value);
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+
+    setPosts([...posts, newPost]);
+    setTitle('');
+    setBody('');
+
+    console.log(newPost);
   };
   return (
     <div>
@@ -38,8 +47,9 @@ export function App() {
             placeholder="Post title"
           />
           <MyInput
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             type="text"
-            ref={bodyInputRef}
             placeholder="Post description"
           />
           <MyButton onClick={addPost} type="submit">

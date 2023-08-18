@@ -1,12 +1,15 @@
 /* eslint-disable react/destructuring-assignment */
-function Post(props: { post: { id: number; title: string; body: string } }) {
-  const { id, title, body } = props.post;
+function Post(props: {
+  number: string;
+  post: { id: number; title: string; body: string };
+}) {
+  const { title, body } = props.post;
 
   return (
     <div className="post">
       <div className="post__content">
         <strong>
-          {id}. {title}
+          {props.number}. {title}
         </strong>
         <p>{body}</p>
       </div>
