@@ -1,6 +1,7 @@
 /* eslint-disable no-return-assign */
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PostForm, { PostInterface } from './components/PostForm';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
 import MyInput from './components/UI/input/MyInput';
@@ -15,20 +16,14 @@ export function App() {
     { id: 3, title: 'Hello World 3', body: 'Lorem ipsum' },
   ]);
 
-  const [post, setPost] = useState({
-    title: '',
-    body: '',
-  });
-
-  const addPost = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    setPosts([...posts, { ...post, id: Date.now() }]);
-    setPost({
-      title: '',
-      body: '',
-    });
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
   };
+
+  const removePost = (post: PostInterface) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
+  };
+
   return (
     <div>
       <Routes>
@@ -36,24 +31,8 @@ export function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <div className="App">
-        <form>
-          <MyInput
-            value={post.title}
-            onChange={(e) => setPost({ ...post, title: e.target.value })}
-            type="text"
-            placeholder="Post title"
-          />
-          <MyInput
-            value={post.body}
-            onChange={(e) => setPost({ ...post, body: e.target.value })}
-            type="text"
-            placeholder="Post description"
-          />
-          <MyButton onClick={addPost} type="submit">
-            Add Post
-          </MyButton>
-        </form>
-        <PostList posts={posts} title="Posts" />
+        <PostForm create={createPost} />
+        <PostList remove={removePost} posts={posts} title="Posts" />
       </div>
     </div>
   );

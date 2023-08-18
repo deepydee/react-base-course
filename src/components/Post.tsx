@@ -1,6 +1,10 @@
+import { PostInterface } from './PostForm';
+import MyButton from './UI/button/MyButton';
+
 /* eslint-disable react/destructuring-assignment */
 function Post(props: {
   number: string;
+  remove: (post: PostInterface) => void;
   post: { id: number; title: string; body: string };
 }) {
   const { title, body } = props.post;
@@ -14,7 +18,9 @@ function Post(props: {
         <p>{body}</p>
       </div>
       <div className="post__bt">
-        <button type="button">Remove</button>
+        <MyButton onClick={() => props.remove(props.post)} type="button">
+          Remove
+        </MyButton>
       </div>
     </div>
   );
