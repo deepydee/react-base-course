@@ -1,8 +1,9 @@
 /* eslint-disable no-return-assign */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PostForm, { PostInterface } from './components/PostForm';
 import PostList from './components/PostList';
+import MyInput from './components/UI/input/MyInput';
 import MySelect from './components/UI/select/MySelect';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
@@ -23,9 +24,28 @@ export function App() {
     { id: 3, title: 'Все песни Enrique Iglesias', body: 'Lorem ipsum' },
   ]);
 
-  const [sort, setSort] = useState('');
+  const [sortOption, setSortOption] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const createPost = (newPost: PostInterface) => {
+  const sortedPosts = useMemo(() => {
+    console.log('SorterdPosts');
+
+    if (sortOption) {
+      return [...posts].sort((a, b) =>
+        a[sortOption].localeCompare(b[sortOption])
+      );
+    }
+
+    return posts;
+  }, [sortOption, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) =>
+      post.title.toLowerCase().includes(searchQuery.toLocaleLowerCase())
+    );
+  }, [searchQuery, sortedPosts]);
+
+  const createPost = (newPost) => {
     setPosts([...posts, newPost]);
   };
 
@@ -34,8 +54,7 @@ export function App() {
   };
 
   const sortPosts = (option: string) => {
-    setSort(option);
-    setPosts([...posts].sort((a, b) => a[option].localeCompare(b[option])));
+    setSortOption(option);
   };
 
   return (
@@ -48,8 +67,14 @@ export function App() {
         <PostForm create={createPost} />
         <hr style={{ margin: '15px 0' }} />
 
+        <MyInput
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search..."
+        />
+
         <MySelect
-          value={sort}
+          value={sortOption}
           onChange={sortPosts}
           defaultValue="Sort by"
           options={[
@@ -57,9 +82,13 @@ export function App() {
             { value: 'body', name: 'By description' },
           ]}
         />
-        <div />
-        {posts.length ? (
-          <PostList remove={removePost} posts={posts} title="Posts" />
+
+        {sortedAndSearchedPosts.length ? (
+          <PostList
+            remove={removePost}
+            posts={sortedAndSearchedPosts}
+            title="Posts"
+          />
         ) : (
           <h2 style={{ textAlign: 'center' }}>No posts found</h2>
         )}
